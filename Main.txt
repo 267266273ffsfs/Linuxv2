@@ -643,7 +643,7 @@ TrollTab:AddButton({
 })
 
 TrollTab:AddDiscordInvite({
-    Name = "Shad0ws Hub",
+    Name = "Linux Hub",
     Description = "Entre No Discord",
     Logo = "rbxassetid://111047667311481",
     Invite = "https://discord.gg/eP55xHGy",
@@ -1353,7 +1353,7 @@ TrollTab:AddButton({
         if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
             TextChatService.TextChannels.RBXGeneral:SendAsync("[SHADOWS PAROU]")
         else
-            print("SHADOWS PAROU")
+            print("LINUX PAROU")
         end
     end
 })
