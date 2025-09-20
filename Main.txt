@@ -6516,6 +6516,614 @@ Tab:AddButton({
     end
 })
 
+Tab:AddSection({ "Partes do Corpo:" })
+
+-- Variáveis globais para armazenar partes selecionadas
+_G.selectedParts = {
+    Torso = nil,
+    BracoDireito = nil,
+    BracoEsquerdo = nil,
+    PernaDireita = nil,
+    PernaEsquerda = nil,
+    Cabeca = nil
+}
+
+-- TextBox para Torso
+Tab:AddTextBox({
+    Name = "Tronco",
+    Description = "ID do Tronco",
+    PlaceholderText = "Linux",
+    TextSize = 16,
+    FontSize = 16,
+    Callback = function(Value)
+        if Value == "" then
+            _G.selectedParts.Torso = nil
+            print("Tronco: vazio")
+        else
+            local id = tonumber(Value) or 0
+            _G.selectedParts.Torso = id
+            print("Tronco: " .. id)
+        end
+    end
+})
+
+-- TextBox para Right Arm  
+Tab:AddTextBox({
+    Name = "Braço Direito",
+    Description = "ID do Braço Direito",
+    PlaceholderText = "Linux",
+    TextSize = 16,
+    FontSize = 16,
+    Callback = function(Value)
+        if Value == "" then
+            _G.selectedParts.BracoDireito = nil
+            print("Braço Direito: vazio")
+        else
+            local id = tonumber(Value) or 0
+            _G.selectedParts.BracoDireito = id
+            print("Braço Direito: " .. id)
+        end
+    end
+})
+
+-- TextBox para Left Arm
+Tab:AddTextBox({
+    Name = "Braço Esquerdo",
+    Description = "ID do Braço Esquerdo",
+    PlaceholderText = "Linux",
+    TextSize = 16,
+    FontSize = 16,
+    Callback = function(Value)
+        if Value == "" then
+            _G.selectedParts.BracoEsquerdo = nil
+            print("Braço Esquerdo: vazio")
+        else
+            local id = tonumber(Value) or 0
+            _G.selectedParts.BracoEsquerdo = id
+            print("Braço Esquerdo: " .. id)
+        end
+    end
+})
+
+-- TextBox para Right Leg
+Tab:AddTextBox({
+    Name = "Perna Direita",
+    Description = "ID da Perna Direita",
+    PlaceholderText = "Linux",
+    TextSize = 16,
+    FontSize = 16,
+    Callback = function(Value)
+        if Value == "" then
+            _G.selectedParts.PernaDireita = nil
+            print("Perna Direita: vazio")
+        else
+            local id = tonumber(Value) or 0
+            _G.selectedParts.PernaDireita = id
+            print("Perna Direita: " .. id)
+        end
+    end
+})
+
+-- TextBox para Left Leg
+Tab:AddTextBox({
+    Name = "Perna Esquerda",
+    Description = "ID da Perna Esquerda",
+    PlaceholderText = "Linux",
+    TextSize = 16,
+    FontSize = 16,
+    Callback = function(Value)
+        if Value == "" then
+            _G.selectedParts.PernaEsquerda = nil
+            print("Perna Esquerda: vazio")
+        else
+            local id = tonumber(Value) or 0
+            _G.selectedParts.PernaEsquerda = id
+            print("Perna Esquerda: " .. id)
+        end
+    end
+})
+
+-- TextBox para Head
+Tab:AddTextBox({
+    Name = "Cabeça",
+    Description = "ID da Cabeça",
+    PlaceholderText = "Linux",
+    TextSize = 16,
+    FontSize = 16,
+    Callback = function(Value)
+        if Value == "" then
+            _G.selectedParts.Cabeca = nil
+            print("Cabeça: vazio")
+        else
+            local id = tonumber(Value) or 0
+            _G.selectedParts.Cabeca = id
+            print("Cabeça: " .. id)
+        end
+    end
+})
+
+Tab:AddSection({ "Carregar Partes:" })
+
+-- Variável para armazenar a parte selecionada no dropdown
+_G.parteSelecionada = "Tronco"
+
+-- Dropdown para selecionar qual parte carregar
+Tab:AddDropdown({
+    Name = "Selecionar Parte",
+    Description = "Escolha qual parte equipar",
+    Default = "Tronco",
+    Options = {"Tronco", "Braço Direito", "Braço Esquerdo", "Perna Direita", "Perna Esquerda", "Cabeça"},
+    Callback = function(Value)
+        _G.parteSelecionada = Value
+        print("Parte selecionada: " .. Value)
+    end
+})
+
+-- Botão para equipar a parte selecionada no dropdown
+Tab:AddButton({
+    Name = "Equipar Parte Selecionada",
+    Description = "Equipa apenas a parte escolhida no dropdown",
+    Callback = function()
+        local args = {
+            [1] = {
+                [1] = 0, -- Torso
+                [2] = 0, -- Right Arm
+                [3] = 0, -- Left Arm
+                [4] = 0, -- Right Leg
+                [5] = 0, -- Left Leg
+                [6] = 0  -- Head
+            }
+        }
+        
+        -- Define qual parte carregar baseado na seleção do dropdown
+        if _G.parteSelecionada == "Tronco" and _G.selectedParts.Torso then
+            args[1][1] = _G.selectedParts.Torso
+            print("Equipando Tronco: " .. _G.selectedParts.Torso)
+        elseif _G.parteSelecionada == "Braço Direito" and _G.selectedParts.BracoDireito then
+            args[1][2] = _G.selectedParts.BracoDireito
+            print("Equipando Braço Direito: " .. _G.selectedParts.BracoDireito)
+        elseif _G.parteSelecionada == "Braço Esquerdo" and _G.selectedParts.BracoEsquerdo then
+            args[1][3] = _G.selectedParts.BracoEsquerdo
+            print("Equipando Braço Esquerdo: " .. _G.selectedParts.BracoEsquerdo)
+        elseif _G.parteSelecionada == "Perna Direita" and _G.selectedParts.PernaDireita then
+            args[1][4] = _G.selectedParts.PernaDireita
+            print("Equipando Perna Direita: " .. _G.selectedParts.PernaDireita)
+        elseif _G.parteSelecionada == "Perna Esquerda" and _G.selectedParts.PernaEsquerda then
+            args[1][5] = _G.selectedParts.PernaEsquerda
+            print("Equipando Perna Esquerda: " .. _G.selectedParts.PernaEsquerda)
+        elseif _G.parteSelecionada == "Cabeça" and _G.selectedParts.Cabeca then
+            args[1][6] = _G.selectedParts.Cabeca
+            print("Equipando Cabeça: " .. _G.selectedParts.Cabeca)
+        else
+            print("Erro: " .. _G.parteSelecionada .. " está vazia! Digite um ID primeiro.")
+            return
+        end
+        
+        -- Executa o remote
+        pcall(function()
+            game:GetService("ReplicatedStorage").Remotes.ChangeCharacterBody:InvokeServer(unpack(args))
+        end)
+    end
+})
+
+-- Botão para carregar todas as partes de uma vez
+Tab:AddButton({
+    Name = "Carregar Todas as Partes",
+    Description = "Equipa todas as partes digitadas de uma vez",
+    Callback = function()
+        -- Verifica se pelo menos uma parte tem ID
+        local temAlgumaParteSelecionada = _G.selectedParts.Torso or _G.selectedParts.BracoDireito or 
+                                         _G.selectedParts.BracoEsquerdo or _G.selectedParts.PernaDireita or 
+                                         _G.selectedParts.PernaEsquerda or _G.selectedParts.Cabeca
+        
+        if not temAlgumaParteSelecionada then
+            print("Erro: Nenhuma parte foi selecionada! Digite pelo menos um ID.")
+            return
+        end
+        
+        local args = {
+            [1] = {
+                [1] = _G.selectedParts.Torso or 0,
+                [2] = _G.selectedParts.BracoDireito or 0,
+                [3] = _G.selectedParts.BracoEsquerdo or 0,
+                [4] = _G.selectedParts.PernaDireita or 0,
+                [5] = _G.selectedParts.PernaEsquerda or 0,
+                [6] = _G.selectedParts.Cabeca or 0
+            }
+        }
+        
+        print("Carregando partes selecionadas:")
+        if _G.selectedParts.Torso then print("Tronco: " .. _G.selectedParts.Torso) end
+        if _G.selectedParts.BracoDireito then print("Braço Direito: " .. _G.selectedParts.BracoDireito) end
+        if _G.selectedParts.BracoEsquerdo then print("Braço Esquerdo: " .. _G.selectedParts.BracoEsquerdo) end
+        if _G.selectedParts.PernaDireita then print("Perna Direita: " .. _G.selectedParts.PernaDireita) end
+        if _G.selectedParts.PernaEsquerda then print("Perna Esquerda: " .. _G.selectedParts.PernaEsquerda) end
+        if _G.selectedParts.Cabeca then print("Cabeça: " .. _G.selectedParts.Cabeca) end
+        
+        pcall(function()
+            game:GetService("ReplicatedStorage").Remotes.ChangeCharacterBody:InvokeServer(unpack(args))
+        end)
+    end
+})
+
+Tab:AddSection({ "Outros:" })
+
+-- Botão para Reset Character
+Tab:AddButton({
+    Name = "Resetar Personagem",
+    Description = "Reset completo do personagem",
+    Callback = function()
+        pcall(function()
+            game:GetService("ReplicatedStorage").Remotes.ResetCharacterAppearance:FireServer()
+        end)
+        print("Personagem resetado completamente!")
+    end
+})
+
+Tab:AddSection({ "FE:" })
+
+-- Dropdown para escolher a cor do fogo
+Tab:AddDropdown({
+    Name = "Fire Colors",
+    Description = "Select the <font color='rgb(255, 100, 100)'>Fire Color</font>",
+    Options = {"White", "Orange", "Green", "Blue", "Purple", "Black"},
+    Default = "White",
+    Flag = "fire_color_dropdown",
+    Callback = function(Value)
+        -- Tabela com as cores e seus respectivos IDs e códigos
+        local fireColors = {
+            ["White"] = {
+                id = "18637074370",
+                code = "030FireWhite"
+            },
+            ["Orange"] = {
+                id = "18637025451", 
+                code = "031FireOrange"
+            },
+            ["Green"] = {
+                id = "18637078598",
+                code = "032FireGreen"
+            },
+            ["Blue"] = {
+                id = "18637076370",
+                code = "033FireBlue"
+            },
+            ["Purple"] = {
+                id = "18637070174",
+                code = "034FirePurple"
+            },
+            ["Black"] = {
+                id = "18637072603",
+                code = "035FireBlack"
+            }
+        }
+        
+        -- Armazena globalmente a cor selecionada
+        _G.selectedColor = Value
+        print("Cor selecionada: " .. Value)
+    end
+})
+
+-- Botão para equipar a cor escolhida
+Tab:AddButton({
+    Name = "Equip Fire Color",
+    Callback = function()
+        -- Tabela com as cores e seus respectivos IDs e códigos
+        local fireColors = {
+            ["White"] = {
+                id = "18637074370",
+                code = "030FireWhite"
+            },
+            ["Orange"] = {
+                id = "18637025451", 
+                code = "031FireOrange"
+            },
+            ["Green"] = {
+                id = "18637078598",
+                code = "032FireGreen"
+            },
+            ["Blue"] = {
+                id = "18637076370",
+                code = "033FireBlue"
+            },
+            ["Purple"] = {
+                id = "18637070174",
+                code = "034FirePurple"
+            },
+            ["Black"] = {
+                id = "18637072603",
+                code = "035FireBlack"
+            }
+        }
+        
+        local selectedColor = _G.selectedColor or "White"
+        
+        if selectedColor and fireColors[selectedColor] then
+            local colorData = fireColors[selectedColor]
+            
+            local args = {
+                [1] = colorData.id,
+                [2] = colorData.code
+            }
+            
+            -- Aplica o emmiter com a cor selecionada
+            game:GetService("ReplicatedStorage").Remotes.ApplyEmmiter:InvokeServer(unpack(args))
+            
+            print("Equipado: " .. selectedColor .. " Fire")
+        else
+            warn("Erro: Cor não encontrada!")
+        end
+    end
+})
+
+-- Dropdown para escolher a cor do smoke
+Tab:AddDropdown({
+    Name = "Smoke Colors",
+    Description = "Select the <font color='rgb(150, 150, 150)'>Smoke Color</font>",
+    Options = {"White", "Yellow", "Orange", "Green", "Blue", "Purple", "Red", "Black"},
+    Default = "White",
+    Flag = "smoke_color_dropdown",
+    Callback = function(Value)
+        -- Tabela com as cores de smoke e seus respectivos IDs e códigos
+        local smokeColors = {
+            ["White"] = {
+                id = "18637791748",
+                code = "080SmokeWhite"
+            },
+            ["Yellow"] = {
+                id = "18637800482",
+                code = "081SmokeYellow"
+            },
+            ["Orange"] = {
+                id = "18637793920",
+                code = "082SmokeOrange"
+            },
+            ["Green"] = {
+                id = "18637789299",
+                code = "083SmokeGreen"
+            },
+            ["Blue"] = {
+                id = "18637803021",
+                code = "084SmokeBlue"
+            },
+            ["Purple"] = {
+                id = "18637813360",
+                code = "085SmokePurple"
+            },
+            ["Red"] = {
+                id = "18637796598",
+                code = "086SmokeRed"
+            },
+            ["Black"] = {
+                id = "18637798529",
+                code = "087SmokeBlack"
+            }
+        }
+        
+        -- Armazena globalmente a cor de smoke selecionada
+        _G.selectedSmokeColor = Value
+        print("Cor de smoke selecionada: " .. Value)
+    end
+})
+
+-- Botão para equipar a cor de smoke escolhida
+Tab:AddButton({
+    Name = "Equip Smoke Color",
+    Callback = function()
+        -- Tabela com as cores de smoke e seus respectivos IDs e códigos
+        local smokeColors = {
+            ["White"] = {
+                id = "18637791748",
+                code = "080SmokeWhite"
+            },
+            ["Yellow"] = {
+                id = "18637800482",
+                code = "081SmokeYellow"
+            },
+            ["Orange"] = {
+                id = "18637793920",
+                code = "082SmokeOrange"
+            },
+            ["Green"] = {
+                id = "18637789299",
+                code = "083SmokeGreen"
+            },
+            ["Blue"] = {
+                id = "18637803021",
+                code = "084SmokeBlue"
+            },
+            ["Purple"] = {
+                id = "18637813360",
+                code = "085SmokePurple"
+            },
+            ["Red"] = {
+                id = "18637796598",
+                code = "086SmokeRed"
+            },
+            ["Black"] = {
+                id = "18637798529",
+                code = "087SmokeBlack"
+            }
+        }
+        
+        local selectedSmokeColor = _G.selectedSmokeColor or "White"
+        
+        if selectedSmokeColor and smokeColors[selectedSmokeColor] then
+            local colorData = smokeColors[selectedSmokeColor]
+            
+            local args = {
+                [1] = colorData.id,
+                [2] = colorData.code
+            }
+            
+            -- Aplica o emmiter com a cor de smoke selecionada
+            game:GetService("ReplicatedStorage").Remotes.ApplyEmmiter:InvokeServer(unpack(args))
+            
+            print("Equipado: " .. selectedSmokeColor .. " Smoke")
+        else
+            warn("Erro: Cor de smoke não encontrada!")
+        end
+    end
+})
+
+-- Toggle para ativar/desativar o corpo personalizado
+Tab:AddToggle({
+    Name = "Small",
+    Description = "",
+    Default = false,
+    Flag = "custom_body_toggle",
+    Callback = function(Value)
+        -- Corpo personalizado que será aplicado
+        local customBody = {
+            [1] = 104157277410075,
+            [2] = 86280536086607,
+            [3] = 81974054542977,
+            [4] = 74524984742501,
+            [5] = 122626731952977,
+            [6] = 134082579
+        }
+
+        -- Função para aplicar o corpo personalizado
+        local function applyCustomBody()
+            local args = {
+                [1] = customBody
+            }
+            game:GetService("ReplicatedStorage").Remotes.ChangeCharacterBody:InvokeServer(unpack(args))
+        end
+
+        -- Função para resetar para a aparência original
+        local function resetToOriginalBody()
+            game:GetService("ReplicatedStorage").Remotes.ResetCharacterAppearance:FireServer()
+        end
+        
+        if Value then
+            -- Ativando corpo personalizado
+            applyCustomBody()
+            print("Corpo personalizado ativado!")
+        else
+            -- Desativando corpo personalizado - volta ao original
+            resetToOriginalBody()
+            print("Corpo resetado para o original!")
+        end
+    end
+})
+
+-- Toggle para ativar/desativar o segundo corpo personalizado
+Tab:AddToggle({
+    Name = "Giant Avatar",
+    Description = "",
+    Default = false,
+    Flag = "custom_body_v2_toggle",
+    Callback = function(Value)
+        -- Segundo corpo personalizado que será aplicado
+        local customBodyV2 = {
+            [1] = 17713016036,
+            [2] = 17713016151,
+            [3] = 17713015861,
+            [4] = 17713021340,
+            [5] = 17713016191,
+            [6] = 6340213
+        }
+
+        -- Função para aplicar o segundo corpo personalizado
+        local function applyCustomBodyV2()
+            local args = {
+                [1] = customBodyV2
+            }
+            game:GetService("ReplicatedStorage").Remotes.ChangeCharacterBody:InvokeServer(unpack(args))
+        end
+
+        -- Função para resetar para a aparência original
+        local function resetToOriginalBody()
+            game:GetService("ReplicatedStorage").Remotes.ResetCharacterAppearance:FireServer()
+        end
+        
+        if Value then
+            -- Ativando segundo corpo personalizado
+            applyCustomBodyV2()
+            print("Corpo personalizado V2 ativado!")
+        else
+            -- Desativando corpo personalizado - volta ao original
+            resetToOriginalBody()
+            print("Corpo resetado para o original!")
+        end
+    end
+})
+
+Tab:AddSection({ "Outros Efeitos (Fire & Smoke)" })
+
+-- Toggle para Loop Smoke Avatar
+Tab:AddToggle({
+    Name = "Loop Smoke",
+    Default = false,
+    Callback = function(Value)
+        -- Variável para controlar o loop de smoke
+        local isSmokeLoopActive = Value
+
+        if Value then
+            -- Inicia o loop quando ativado
+            spawn(function()
+                while isSmokeLoopActive do
+                    local mall = workspace:WaitForChild("WorkspaceCom"):WaitForChild("001_Mall"):WaitForChild("001_Pizza"):FindFirstChild("CatchFire")
+                    
+                    if mall then
+                        local touchInterest = mall:FindFirstChild("TouchInterest")
+                        if touchInterest then
+                            firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, mall, 0)
+                            wait()
+                            firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, mall, 1)
+                        end
+                    end
+                    wait(1)
+                end
+                print("Loop Smoke Avatar desativado!")
+            end)
+        else
+            print("Parando Loop Smoke Avatar...")
+        end
+    end
+})
+
+-- Toggle para Loop Fire Avatar
+Tab:AddToggle({
+    Name = "Loop Fire",
+    Description = "As Vezes Nao Pega So Pega Se Tiver Casa Com Churrasqueira",
+    Default = false,
+    Callback = function(Value)
+        -- Variável para controlar o loop de fire
+        local isFireLoopActive = Value
+
+        if Value then
+            -- Inicia o loop quando ativado
+            spawn(function()
+                while isFireLoopActive do
+                    local playerName = game.Players.LocalPlayer.Name
+                    local lotFolder = game:GetService("Workspace"):WaitForChild("001_Lots")
+                    local house = lotFolder:FindFirstChild(playerName .. "House")
+
+                    if house then
+                        local mall = house:WaitForChild("HousePickedByPlayer"):WaitForChild("HouseModel"):WaitForChild("001_BBQ"):FindFirstChild("CatchFire")
+                        if mall then
+                            local touchInterest = mall:FindFirstChild("TouchInterest")
+                            if touchInterest then
+                                firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, mall, 0)
+                                wait()
+                                firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, mall, 1)
+                            end
+                        end
+                    else
+                        warn("House not found for player: " .. playerName)
+                    end
+                    wait(1)
+                end
+                print("Loop Fire Avatar desativado!")
+            end)
+        else
+            print("Parando Loop Fire Avatar...")
+        end
+    end
+})
+
 Tab:AddSection({"Roupas 3D"})
 
 Tab:AddDropdown({
