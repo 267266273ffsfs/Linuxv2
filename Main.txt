@@ -8739,6 +8739,418 @@ end
 
 local CarTab = Window:MakeTab({"Carro", "car"})
 
+CarTab:AddSection({ "Spawnar Carros Premium & Vip" })
+CarTab:AddDropdown({
+    Name = "Selecionar Carro",
+    Description = "Escolha qual carro spawnar",
+    Default = "4DoorJeep",
+    Options = {"4DoorJeep", "Continental", "Buggy", "Benz", "BatMobile", "Bugatti", "CyberTruck", "Escalade", "Formula1", "Ferrari", "RollsRoyce", "Roadster", "RaptorMonster", "NascarPremium", "Limo", "Lamboego", "HummerLimo", "HalloweenPurpleCar", "Hummer", "HalloweenGreenTruck", "HalloweenBatMobile", "GoKartVPass", "Skyline", "SWAT", "RollsSUV", "CopLamborgini", "SuperCar", "TankPremium"},
+    Callback = function(Value)
+        _G.carroSelecionado = Value
+        print("Carro selecionado: " .. Value)
+    end
+})
+
+-- Botão para spawnar o carro selecionado
+CarTab:AddButton({
+    Name = "Spawnar Carro Selecionado",
+    Description = "Executa todas as interações para spawnar o carro escolhido",
+    Callback = function()
+        -- Script Compacto - Executa todas as interações
+        -- Créditos ao SimpleSpy (exx#9394)
+
+        local ReplicatedStorage = game:GetService("ReplicatedStorage")
+        local Players = game:GetService("Players")
+        local player = Players.LocalPlayer
+        local carroEscolhido = _G.carroSelecionado or "4DoorJeep"
+
+        -- 1 - Abrir HUD do veículo
+        ReplicatedStorage.Remotes.TelemetryClientInteraction:FireServer(
+            "uiInteraction",
+            {["buttonName"] = "VehicleHudButton"}
+        )
+
+        -- 2 - Clicar no filtro (selecionar carro)
+        ReplicatedStorage.Remotes.TelemetryClientInteraction:FireServer(
+            "filterClick",
+            {["name"] = carroEscolhido, ["itemType"] = "Vehicles"}
+        )
+
+        -- 3 - Contexto de Upsell (premium car)
+        ReplicatedStorage.Remotes.TelemetryClientInteraction:FireServer(
+            "contextualUpsell",
+            {
+                ["adType"] = "Portal",
+                ["itemId"] = carroEscolhido,
+                ["gamepass"] = 0,
+                ["portalAdFill"] = "Portal",
+                ["reason"] = "premium car"
+            }
+        )
+
+        -- 4 - PickingCar (spawnar carro)
+        ReplicatedStorage.RE:FindFirstChild("1Ca1r"):FireServer(
+            "PickingCar",
+            carroEscolhido
+        )
+
+        -- 5 - Aplicar estado ao veículo (apenas para carros específicos)
+        if carroEscolhido == "4DoorJeep" then
+            ReplicatedStorage.Remotes.ApplyStateToVehicle:InvokeServer(
+                "4DoorJeep-4da8d83b-112f-43e6-bdb0-46ce9f638a65",
+                {
+                    ["Lights"] = {
+                        ["lightsOn"] = false,
+                        ["hazardsActive"] = false
+                    },
+                    ["IsLocked"] = false,
+                    ["Appearance"] = {
+                        ["IsSmoking"] = false,
+                        ["WheelDecal"] = "http://www.roblox.com/asset/?id=6409728408",
+                        ["BabyCarSeatInstalledNumber"] = 0,
+                        ["Color"] = nil,
+                        ["IsOnFire"] = false,
+                        ["SuspensionHeight"] = 2
+                    },
+                    ["Performance"] = {
+                        ["DriftStrength"] = 1,
+                        ["MaxSpeed"] = 25,
+                        ["Turbo"] = 0
+                    },
+                    ["Owner"] = player
+                }
+            )
+        elseif carroEscolhido == "TankPremium" then
+            ReplicatedStorage.Remotes.ApplyStateToVehicle:InvokeServer(
+                "TankPremium-18f6122a-5c9b-431c-a9c2-410a20d36b28",
+                {
+                    ["Lights"] = {
+                        ["lightsOn"] = false,
+                        ["hazardsActive"] = false
+                    },
+                    ["IsLocked"] = false,
+                    ["Appearance"] = {
+                        ["IsSmoking"] = false,
+                        ["WheelDecal"] = "",
+                        ["BabyCarSeatInstalledNumber"] = 0,
+                        ["Color"] = nil,
+                        ["IsOnFire"] = false,
+                        ["SuspensionHeight"] = 2.1
+                    },
+                    ["Performance"] = {
+                        ["DriftStrength"] = 1,
+                        ["MaxSpeed"] = 25,
+                        ["Turbo"] = 0
+                    },
+                    ["Owner"] = player
+                }
+            )
+        elseif carroEscolhido == "CopLamborgini" then
+            ReplicatedStorage.Remotes.ApplyStateToVehicle:InvokeServer(
+                "CopLamborgini-0abfd150-90fd-4f35-956c-d11873f48da0",
+                {
+                    ["Lights"] = {
+                        ["lightsOn"] = false,
+                        ["hazardsActive"] = false
+                    },
+                    ["IsLocked"] = false,
+                    ["Appearance"] = {
+                        ["IsSmoking"] = false,
+                        ["WheelDecal"] = "rbxassetid://6409032379",
+                        ["BabyCarSeatInstalledNumber"] = 0,
+                        ["Color"] = nil,
+                        ["IsOnFire"] = false,
+                        ["SuspensionHeight"] = 2.4
+                    },
+                    ["Performance"] = {
+                        ["DriftStrength"] = 1,
+                        ["MaxSpeed"] = 25,
+                        ["Turbo"] = 0
+                    },
+                    ["Owner"] = player
+                }
+            )
+        elseif carroEscolhido == "RollsSUV" then
+            ReplicatedStorage.Remotes.ApplyStateToVehicle:InvokeServer(
+                "RollsSUV-a96a08fc-9d1f-4abe-9473-d69a6a99b652",
+                {
+                    ["Lights"] = {
+                        ["lightsOn"] = false,
+                        ["hazardsActive"] = false
+                    },
+                    ["IsLocked"] = false,
+                    ["Appearance"] = {
+                        ["IsSmoking"] = false,
+                        ["WheelDecal"] = "http://www.roblox.com/asset/?id=6409032379",
+                        ["BabyCarSeatInstalledNumber"] = 0,
+                        ["Color"] = nil,
+                        ["IsOnFire"] = false,
+                        ["SuspensionHeight"] = 2.7
+                    },
+                    ["Performance"] = {
+                        ["DriftStrength"] = 1,
+                        ["MaxSpeed"] = 25,
+                        ["Turbo"] = 0
+                    },
+                    ["Owner"] = player
+                }
+            )
+        elseif carroEscolhido == "HummerLimo" then
+            ReplicatedStorage.Remotes.ApplyStateToVehicle:InvokeServer(
+                "HummerLimo-8d49d908-b687-4ab2-8c3d-b17c96383458",
+                {
+                    ["Lights"] = {
+                        ["lightsOn"] = false,
+                        ["hazardsActive"] = false
+                    },
+                    ["IsLocked"] = false,
+                    ["Appearance"] = {
+                        ["IsSmoking"] = false,
+                        ["WheelDecal"] = "http://www.roblox.com/asset/?id=6409032379",
+                        ["BabyCarSeatInstalledNumber"] = 0,
+                        ["Color"] = nil,
+                        ["IsOnFire"] = false,
+                        ["SuspensionHeight"] = 2.7
+                    },
+                    ["Performance"] = {
+                        ["DriftStrength"] = 1,
+                        ["MaxSpeed"] = 25,
+                        ["Turbo"] = 0
+                    },
+                    ["Owner"] = player
+                }
+            )
+        elseif carroEscolhido == "HalloweenPurpleCar" then
+            ReplicatedStorage.Remotes.ApplyStateToVehicle:InvokeServer(
+                "HalloweenPurpleCar-c6b5482a-f03c-4ff7-a384-0b5a4032be14",
+                {
+                    ["Lights"] = {
+                        ["lightsOn"] = false,
+                        ["hazardsActive"] = false
+                    },
+                    ["IsLocked"] = false,
+                    ["Appearance"] = {
+                        ["IsSmoking"] = false,
+                        ["WheelDecal"] = "http://www.roblox.com/asset/?id=6409032379",
+                        ["BabyCarSeatInstalledNumber"] = 0,
+                        ["Color"] = nil,
+                        ["IsOnFire"] = false,
+                        ["SuspensionHeight"] = 2
+                    },
+                    ["Performance"] = {
+                        ["DriftStrength"] = 1,
+                        ["MaxSpeed"] = 25,
+                        ["Turbo"] = 0
+                    },
+                    ["Owner"] = player
+                }
+            )
+        elseif carroEscolhido == "Hummer" then
+            ReplicatedStorage.Remotes.ApplyStateToVehicle:InvokeServer(
+                "Hummer-d02f343a-1d6e-4274-9b34-1cad00c5cb34",
+                {
+                    ["Lights"] = {
+                        ["lightsOn"] = false,
+                        ["hazardsActive"] = false
+                    },
+                    ["IsLocked"] = false,
+                    ["Appearance"] = {
+                        ["IsSmoking"] = false,
+                        ["WheelDecal"] = "http://www.roblox.com/asset/?id=6471657544",
+                        ["BabyCarSeatInstalledNumber"] = 0,
+                        ["Color"] = nil,
+                        ["IsOnFire"] = false,
+                        ["SuspensionHeight"] = 2
+                    },
+                    ["Performance"] = {
+                        ["DriftStrength"] = 1,
+                        ["MaxSpeed"] = 25,
+                        ["Turbo"] = 0
+                    },
+                    ["Owner"] = player
+                }
+            )
+        elseif carroEscolhido == "HalloweenGreenTruck" then
+            ReplicatedStorage.Remotes.ApplyStateToVehicle:InvokeServer(
+                "HalloweenGreenTruck-2fec9cb0-efeb-4617-8d9c-d93793412fa3",
+                {
+                    ["Lights"] = {
+                        ["lightsOn"] = false,
+                        ["hazardsActive"] = false
+                    },
+                    ["IsLocked"] = false,
+                    ["Appearance"] = {
+                        ["IsSmoking"] = false,
+                        ["WheelDecal"] = "http://www.roblox.com/asset/?id=4625492000",
+                        ["BabyCarSeatInstalledNumber"] = 0,
+                        ["Color"] = nil,
+                        ["IsOnFire"] = false,
+                        ["SuspensionHeight"] = 2
+                    },
+                    ["Performance"] = {
+                        ["DriftStrength"] = 1,
+                        ["MaxSpeed"] = 25,
+                        ["Turbo"] = 0
+                    },
+                    ["Owner"] = player
+                }
+            )
+        elseif carroEscolhido == "GoKartVPass" then
+            ReplicatedStorage.Remotes.ApplyStateToVehicle:InvokeServer(
+                "GoKartVPass-0d18cef1-499f-4b76-aed3-7aef2d839c03",
+                {
+                    ["Lights"] = {
+                        ["lightsOn"] = false,
+                        ["hazardsActive"] = false
+                    },
+                    ["IsLocked"] = false,
+                    ["Appearance"] = {
+                        ["IsSmoking"] = false,
+                        ["WheelDecal"] = "rbxassetid://16550212844",
+                        ["BabyCarSeatInstalledNumber"] = 0,
+                        ["Color"] = nil,
+                        ["IsOnFire"] = false,
+                        ["SuspensionHeight"] = 1.6
+                    },
+                    ["Performance"] = {
+                        ["DriftStrength"] = 1,
+                        ["MaxSpeed"] = 25,
+                        ["Turbo"] = 0
+                    },
+                    ["Owner"] = player
+                }
+            )
+        elseif carroEscolhido == "RollsRoyce" then
+            ReplicatedStorage.Remotes.ApplyStateToVehicle:InvokeServer(
+                "RollsRoyce-37857b4f-96ab-4d06-8b94-ba2d6a0896e6",
+                {
+                    ["Lights"] = {
+                        ["lightsOn"] = false,
+                        ["hazardsActive"] = false
+                    },
+                    ["IsLocked"] = false,
+                    ["Appearance"] = {
+                        ["IsSmoking"] = false,
+                        ["WheelDecal"] = "rbxassetid://12424328898",
+                        ["BabyCarSeatInstalledNumber"] = 0,
+                        ["Color"] = nil,
+                        ["IsOnFire"] = false,
+                        ["SuspensionHeight"] = 2.1
+                    },
+                    ["Performance"] = {
+                        ["DriftStrength"] = 1,
+                        ["MaxSpeed"] = 25,
+                        ["Turbo"] = 0
+                    },
+                    ["Owner"] = player
+                }
+            )
+        elseif carroEscolhido == "Formula1" then
+            ReplicatedStorage.Remotes.ApplyStateToVehicle:InvokeServer(
+                "Formula1-c586171c-e6fa-4a0f-8357-df9b9052cf9f",
+                {
+                    ["Lights"] = {
+                        ["lightsOn"] = false,
+                        ["hazardsActive"] = false
+                    },
+                    ["IsLocked"] = false,
+                    ["Appearance"] = {
+                        ["IsSmoking"] = false,
+                        ["WheelDecal"] = "http://www.roblox.com/asset/?id=4504219366",
+                        ["BabyCarSeatInstalledNumber"] = 0,
+                        ["Color"] = nil,
+                        ["IsOnFire"] = false,
+                        ["SuspensionHeight"] = 2
+                    },
+                    ["Performance"] = {
+                        ["DriftStrength"] = 1,
+                        ["MaxSpeed"] = 25,
+                        ["Turbo"] = 0
+                    },
+                    ["Owner"] = player
+                }
+            )
+        elseif carroEscolhido == "Escalade" then
+            ReplicatedStorage.Remotes.ApplyStateToVehicle:InvokeServer(
+                "Escalade-b74be8db-2635-4495-9066-823402be7d3d",
+                {
+                    ["Lights"] = {
+                        ["lightsOn"] = false,
+                        ["hazardsActive"] = false
+                    },
+                    ["IsLocked"] = false,
+                    ["Appearance"] = {
+                        ["IsSmoking"] = false,
+                        ["WheelDecal"] = "http://www.roblox.com/asset/?id=6409032379",
+                        ["BabyCarSeatInstalledNumber"] = 0,
+                        ["Color"] = nil,
+                        ["IsOnFire"] = false,
+                        ["SuspensionHeight"] = 2
+                    },
+                    ["Performance"] = {
+                        ["DriftStrength"] = 1,
+                        ["MaxSpeed"] = 25,
+                        ["Turbo"] = 0
+                    },
+                    ["Owner"] = player
+                }
+            )
+        elseif carroEscolhido == "CyberTruck" then
+            ReplicatedStorage.Remotes.ApplyStateToVehicle:InvokeServer(
+                "CyberTruck-045d6c3a-8261-4bb5-a8e3-5d52b85c1b0c",
+                {
+                    ["Lights"] = {
+                        ["lightsOn"] = false,
+                        ["hazardsActive"] = false
+                    },
+                    ["IsLocked"] = false,
+                    ["Appearance"] = {
+                        ["IsSmoking"] = false,
+                        ["WheelDecal"] = "http://www.roblox.com/asset/?id=6409745580",
+                        ["BabyCarSeatInstalledNumber"] = 0,
+                        ["Color"] = nil,
+                        ["IsOnFire"] = false,
+                        ["SuspensionHeight"] = 2
+                    },
+                    ["Performance"] = {
+                        ["DriftStrength"] = 1,
+                        ["MaxSpeed"] = 25,
+                        ["Turbo"] = 0
+                    },
+                    ["Owner"] = player
+                }
+            )
+        elseif carroEscolhido == "Bugatti" then
+            ReplicatedStorage.Remotes.ApplyStateToVehicle:InvokeServer(
+                "Bugatti-b95d1391-2e66-4cfd-9802-d8089e3d192f",
+                {
+                    ["Lights"] = {
+                        ["lightsOn"] = false,
+                        ["hazardsActive"] = false
+                    },
+                    ["IsLocked"] = false,
+                    ["Appearance"] = {
+                        ["IsSmoking"] = false,
+                        ["WheelDecal"] = "http://www.roblox.com/asset/?id=6409032379",
+                        ["BabyCarSeatInstalledNumber"] = 0,
+                        ["Color"] = nil,
+                        ["IsOnFire"] = false,
+                        ["SuspensionHeight"] = 2.1
+                    },
+                    ["Performance"] = {
+                        ["DriftStrength"] = 1,
+                        ["MaxSpeed"] = 25,
+                        ["Turbo"] = 0
+                    },
+                    ["Owner"] = player
+                }
+            )
+        end
+        
+        print("Carro " .. carroEscolhido .. " spawnado com sucesso!")
+    end
+})
+
 -- Colors for RGB
 local colors = {
     Color3.new(1, 0, 0),     -- Red
